@@ -12,7 +12,7 @@ function MetamaskProvider({ children }: { children: any }) {
   useEffect(() => {
     injected
       .isAuthorized()
-      .then((isAuthorized:any) => {
+      .then((isAuthorized: any) => {
         setLoaded(true);
         if (isAuthorized && !networkActive && !networkError) {
           activateNetwork(injected);
@@ -31,4 +31,28 @@ function MetamaskProvider({ children }: { children: any }) {
 export default MetamaskProvider;
 
 /* Using HTML? follow this method bellow */
+
+const { ethereum } = window;
+
+const getAccountsButton = document.getElementById("getAccounts");
+const getAccountsResult = document.getElementById("getAccountsResult");
+
+// connect web3 wallet
+const onClickConnect = async () => {
+  try {
+    await ethereum.request({ method: "eth_requestAccounts" });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+getAccountsButton?.addEventListener("click", async () => {
+  // get user address in array
+  const accounts = await ethereum.request({ method: "eth_accounts" });
+  //We take the first address in the array of addresses and display it
+  getAccountsResult?.innerHTML.concat(
+    accounts[0] || "Not able to get accounts"
+  );
+});
+
 // you can now proceed with using the account as it is used in this application. Enjoy!
